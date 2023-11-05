@@ -10,6 +10,7 @@ import numpy as np
 #                  = 7 776s
 #                  = 129min 36s = 2h 9min 36s
 
+N = 3 # Nombre de cercles à afficher
 start_time = cv2.getTickCount()
 # Chargez l'image four.png (assurez-vous qu'elle est dans le même répertoire)
 image = cv2.imread("Images/four.png", cv2.IMREAD_GRAYSCALE)
@@ -60,14 +61,7 @@ for y, x in contour_indices:
 
 # 6. Identification des maximas locaux dans l'accumulateur
 def is_local_maximum(i, j, k):
-    for m in range(i - 1, i + 2):
-        for n in range(j - 1, j + 2):
-            for o in range(k - 1, k + 2):
-                if (m != i or n != j or o != k) and accumulator[m, n, o] >= accumulator[
-                    i, j, k
-                ]:
-                    return False
-    return True
+    return accumulator[i,j,k] == np.max(accumulator[i-1:i+2,j-1:j+2,k-1:k+2])
 
 
 local_maxima = np.zeros(accumulator.shape, dtype=bool)
@@ -78,7 +72,6 @@ for i in range(1, accumulator.shape[0] - 1):
                 local_maxima[i, j, k] = True
 
 # 7. Sélection des N valeurs les plus grandes
-N = 3
 maxima_indices = np.argwhere(local_maxima)
 maxima_values = accumulator[local_maxima]
 sorted_maxima_indices = np.argsort(maxima_values)[::-1][:N]

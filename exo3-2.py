@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+
+N = 4 # Nombre de cercles à afficher
 # Chargez l'image
 image = cv2.imread("Images/four.png", cv2.IMREAD_GRAYSCALE)
 cv2.imshow("Original Image", image)
@@ -72,6 +74,7 @@ def is_local_maximum(i, j, k):
     return True
 
 
+
 local_maxima = np.zeros(accumulator.shape, dtype=bool)
 for i in range(1, accumulator.shape[0] - 1):
     for j in range(1, accumulator.shape[1] - 1):
@@ -80,9 +83,6 @@ for i in range(1, accumulator.shape[0] - 1):
                 local_maxima[i, j, k] = True
 
 # 7. detection des cercles
-N = 4
-
-
 def detect_circle(local_rad_min, local_rad_max, level):
     indexes = []
     if level == 0:
